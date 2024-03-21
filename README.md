@@ -5,7 +5,7 @@ Basic implementation of a convolutional neural network (CNN) in C, used to class
 Linear Algebra Concepts Utilized: 
 
 1. Vectors/Matrices
-2.
+2. Sobel Filter
 
 Explanation of CNN Concepts:
 
