@@ -4,6 +4,6 @@
 
 #include "convolution_layer.h"
 
-void fill_3D_array(struct ConvolutionLayer*);
+void fill_3D_array_random(struct ConvolutionLayer*);
 
 #endif

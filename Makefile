@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
 LDFLAGS = -lm
-SRC = convolution_layer.c cnn_math.c test.c
+SRC = convolution_layer.c cnn_math.c test.c image.c
 OBJ = $(SRC:.c=.o)
 EXECUTABLE = test
 

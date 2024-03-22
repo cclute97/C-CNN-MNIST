@@ -4,7 +4,7 @@
 #include <time.h>
 #include "cnn_math.h"
 
-void fill_3D_array(struct ConvolutionLayer* layer) {
+void fill_3D_array_random(struct ConvolutionLayer* layer) {
     const double MAX_VALUE = 2147483647.0;
     unsigned short i, j, k;
     int random_num;
