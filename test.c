@@ -27,16 +27,17 @@ void test_image_init() {
     // Create and initialize image
     struct Image image_01;
     image_01.init_image_fp = init_image; 
-    image_01.init_image_fp(&image_01, "test.jpg", 463, 703);
+    image_01.init_image_fp(&image_01, "process/test.jpg", 463, 703);
 
-    unsigned short i, j;
-
-    for (i = 0; i < image_01.height; i++) {
-        for (j = 0; j < image_01.width; j++) {
-            printf("%c ", image_01.pixel_data[i][j]);
+    for (int i = 0; i < image_01.width * image_01.height; i++) {
+        printf("%d ", image_01.pixel_data[i]);
+        if (i % image_01.width == 0) {
+            printf("\n");
         }
-        printf("\n");
     }
+
+    image_01.free_image_fp = free_image;
+    image_01.free_image_fp(&image_01);
 }
 
 int main() {

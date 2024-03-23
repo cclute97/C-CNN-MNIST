@@ -7,7 +7,7 @@
 struct Image {
     unsigned short width;
     unsigned short height;
-    unsigned char **pixel_data;
+    unsigned char *pixel_data;
     void (*init_image_fp)(struct Image*, char*, unsigned short, unsigned short);
     void (*free_image_fp)(struct Image*);
 };
