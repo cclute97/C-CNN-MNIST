@@ -51,6 +51,10 @@ void init_image(struct Image* image, char* file_name, unsigned short rows, unsig
     shmctl(shared_memory_ID, IPC_RMID, NULL); 
 }
 
+unsigned char get_element_at(struct Image* image, unsigned short row, unsigned short column) {
+    return image->pixel_data[(row * image->width) + column];
+}
+
 void free_image(struct Image* image) {
     free(image->pixel_data);
 }

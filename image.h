@@ -13,6 +13,8 @@ struct Image {
 };
 
 void init_image(struct Image*, char*, unsigned short, unsigned short); // call another process (C++/opencv) to build array from image and pass back data to fill our struct
+unsigned char get_element_at(struct Image*, unsigned short, unsigned short); // returns value at [i][j] -- used to treat 1D array as 2D array
 void free_image(struct Image*); // clear up memory
+
 
 #endif

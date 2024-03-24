@@ -4,7 +4,8 @@
 #include <string.h>
 #include <opencv2/opencv.hpp>
 
-/* Converts an image into a 2D array of pixel intensity values and attached to shared memory segment passed into pipe*/
+/* Converts an image into a 2D array of pixel intensity values and attached to shared memory segment passed into pipe
+ * Expects 2 args: filename, shared memory ID */
 
 int main(int argc, char *argv[]) {
 
