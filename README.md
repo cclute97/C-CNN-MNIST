@@ -33,4 +33,4 @@ TODO:
 -Find a dataset to use
 -Find a way to convert each image in dataset using convert_image and store in 3D array
 -initialize function pointers in init
--functions for 1D->2D array arithmetic
+-make everything const unless mutable

@@ -20,6 +20,8 @@ struct ConvolutionLayer {
      * All share same index for an output pixel */
 
     unsigned char ***image_regions;
+    unsigned short image_height;
+    unsigned short image_width;
     unsigned short *output_x_pixel;
     unsigned short *output_y_pixel;
 

@@ -32,40 +32,46 @@ void init_layer(struct ConvolutionLayer* layer, unsigned short num_filters, unsi
 void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
 
     int i, j, k, x, y, r, c;
-    unsigned char sub_array[3][3];
+    unsigned char pixel;
+
+    int num_regions = (image->height - 2) * (image->width - 2); // Num of regions when using valid padding
 
     // Allocate memory for layer->image_region (3D array)
-    layer->image_regions = (unsigned char***)malloc(3 * 3 * ((image->height - 2) * (image->width - 2)) * sizeof(unsigned char**));
-    for (i = 0; i < (image->height - 2) * (image->width - 2); i++) {
-        layer->image_regions[i] = (unsigned char**)malloc(image->height * sizeof(unsigned char*));
-        for (j = 0; j < 3; j++) {
-            layer->image_regions[i][j] = (unsigned char*)malloc(image->width * sizeof(unsigned char));
+    layer->image_regions = (unsigned char***)malloc(num_regions * sizeof(unsigned char**));
+    for (i = 0; i < num_regions; i++) {
+        layer->image_regions[i] = (unsigned char**)malloc(layer->filter_height * sizeof(unsigned char*));
+        for (j = 0; j < layer->filter_height; j++) {
+            layer->image_regions[i][j] = (unsigned char*)malloc(layer->filter_width * sizeof(unsigned char));
         }
     }
 
+    // Allocate memory for layer->output_x_pixel && layer->output_y_pixel
+    layer->output_x_pixel = malloc(image->width * image->height * sizeof(unsigned short));
+    layer->output_y_pixel = malloc(image->width * image->height * sizeof(unsigned short));
+
     // Extract all 3x3 sections of image and store
     k = 0;
-    r = 0;
-    c = 0;
 
     for (i = 1; i < image->height - 1; i++) {
         for (j = 1; j < image->width - 1; j++) {
+            r = 0;
             for (x = i - 1; x <= i + 1; x++) {
                 c = 0;
                 for (y = j - 1; y <= j + 1; y++) {
-                    sub_array[r][c] = get_element_at(image, (unsigned short) x, (unsigned short) y);
+                    pixel = get_element_at(image, (unsigned short) x, (unsigned short) y);
+                    layer->image_regions[k][r][c] = pixel; 
                     c++;
                 }
                 r++;
             }
-            memcpy(layer->image_regions[k], sub_array, sizeof(sub_array));
             layer->output_x_pixel[k] = j;
             layer->output_y_pixel[k] = i;
-            r = 0;
             k++;
         }
     }
 }
+
+//struct Image* forward_pass(struct ConvolutionLayer* layer, struct Image* image) {}
 
 // Free Memory Functions // 
 
@@ -93,4 +99,7 @@ void free_regions(struct ConvolutionLayer* layer) {
         free(layer->image_regions[i]);
     }
     free(layer->image_regions);
+
+    free(layer->output_x_pixel);
+    free(layer->output_y_pixel);
 }
