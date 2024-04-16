@@ -13,7 +13,7 @@ Linear Algebra/Data Science Concepts Utilized:
 How Does It Work?
 
 A convolutional neural network is a neural network that utilizes a hidden layer, known as a convolution layer.  They are typically used for computer vision applications due to the 
-high number of pixels that that need to be analyzed.  Convolution is used to transform an input image to an output image that is better formated for identifying distinguishing features (edges).  We start by taking an input image and convolving the image with a filter (sobel filter in this case) to produce an output image.  This consists of the following steps: 
+high number of pixels that need to be analyzed.  Convolution is used to transform an input image to an output image that is better formated for identifying distinguishing features (edges).  We start by taking an input image and convolving the image with a filter (sobel filter in this case) to produce an output image.  This consists of the following steps: 
 
    1. Overlaying the filter over the image at a given location.
    2. Performing element wise multiplication between the corresponding values in the image and the overlayed filter.  

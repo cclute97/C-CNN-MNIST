@@ -14,7 +14,7 @@ struct ConvolutionLayer {
     double ***filters; 
 
     /* For Generation of 3x3 regions of image (using valid padding)
-     * image_region -- nx3x3 array containing image regions, where n is the number of 3x3 regions produced from image
+     * image_regions -- nx3x3 array containing image regions, where n is the number of 3x3 regions produced from image
      * output_x_pixel -- array of x positions of pixel in output image
      * output_y_pixel -- array of y positions of pixel in output image 
      * All share same index for an output pixel */
