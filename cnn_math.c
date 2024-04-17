@@ -32,3 +32,17 @@ void multiply_3d_by_2d(const struct ConvolutionLayer* layer, const unsigned char
         }
     }
 }
+
+void sum_3d_to_1d(const struct ConvolutionLayer *layer, const double*** array_3d, double* array_1d) {
+    double sum = 0;
+    int i, j, k;
+    for (i = 0; i < layer->num_filters; i++) {
+        for (j = 0; j < layer->filter_height; j++) {
+            for (k = 0; k < layer->filter_width; k++) {
+                sum += array_3d[i][j][k];
+            }
+        }
+        array_1d[i] = sum;
+        sum = 0;
+    }
+}

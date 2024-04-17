@@ -75,8 +75,9 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
 // Performs forward pass of the conv layer. Returns 3D array of dimensions:
 // (image_height - 2, image_width - 2 , num filters)
 unsigned char*** forward_pass(struct ConvolutionLayer* layer) {
-    unsigned char ***output; // resulting output volume to return 
-    double ***result; // stores result of multiply_3d_by_2d()
+    unsigned char ***output; // output volume to return 
+    double ***result_3d; // stores result of multiply_3d_by_2d()
+    double *result_1d; // stores result  of sum_3d_to_1d()D
     int i, j;
 
     output = (unsigned char ***) malloc((layer->image_height - 2) * sizeof(unsigned char **));
@@ -87,27 +88,33 @@ unsigned char*** forward_pass(struct ConvolutionLayer* layer) {
         }
     }
 
-    result = (double***) malloc(layer->num_filters * sizeof(double**));    
+    result_3d = (double***) malloc(layer->num_filters * sizeof(double**));    
     for (i = 0; i < layer->num_filters; i++) {
-        result[i] = (double**) malloc(layer->filter_height * sizeof(double*));
+        result_3d[i] = (double**) malloc(layer->filter_height * sizeof(double*));
         for (j = 0; j < layer->filter_height; j++) {
-            result[i][j] = (double*) malloc(layer->filter_width * sizeof(double));
+            result_3d[i][j] = (double*) malloc(layer->filter_width * sizeof(double));
         }
     }
 
+    result_1d = (double *) malloc(layer->num_filters * sizeof(double));
 
-    // Free  memory of result
+
+    // TODO: create ouput volume
+
+
+    // Free  memory of result_3d and result_1d
     for (i = 0; i < layer->filter_height; i++) {
         for (j = 0; j < layer->filter_width; j++) {
-            free(result[i][j]);
+            free(result_3d[i][j]);
         }
-        free(result[i]);
+        free(result_3d[i]);
     }
-    free(result); 
+    free(result_3d); 
+
+    free(result_1d);
 
     return output;
 }
-
 
 // Free Memory Functions // 
 

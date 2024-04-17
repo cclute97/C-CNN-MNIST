@@ -12,6 +12,7 @@ void fill_3D_array_random(struct ConvolutionLayer*);
 void multiply_3d_by_2d(const struct ConvolutionLayer*, const unsigned char**, double***);
 
 // Converts a given 3d array into 1d array, which contains the sum of each 2d array in the given 3d array
-double* sum_3d(double***);
+// Stores in a given 1d array
+void sum_3d_to_1d(const struct ConvolutionLayer*, const double***, double*);
 
 #endif
