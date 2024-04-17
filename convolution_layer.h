@@ -23,22 +23,22 @@ struct ConvolutionLayer {
     unsigned char ***image_regions;
     unsigned short image_height;
     unsigned short image_width;
-    unsigned short *output_x_pixel;
-    unsigned short *output_y_pixel;
+    int *output_x_pixel;
+    int *output_y_pixel;
     int num_regions;
 
     /* Function pointers (Note: * comes before variable name when declaring a pointer variable, after when declaring a pointer type) */
 
     void (*init_layer_fp)(struct ConvolutionLayer*, unsigned short, unsigned short, unsigned short); 
     void (*iterate_regions_fp)(struct ConvolutionLayer*, struct Image*); // Generates all 3x3 image regions with valid padding
-    unsigned char*** (*forward_pass_fp)(struct ConvolutionLayer*); // Performs forward pass on image and returns output volume
+    double*** (*forward_pass_fp)(struct ConvolutionLayer*); // Performs forward pass on image and returns output volume
     void (*free_filters_fp)(struct ConvolutionLayer*);
     void (*free_regions_fp)(struct ConvolutionLayer*);
 };
 
 void init_layer(struct ConvolutionLayer*, unsigned short, unsigned short, unsigned short);
 void iterate_regions(struct ConvolutionLayer*, struct Image*);
-unsigned char*** forward_pass(struct ConvolutionLayer*);
+double*** forward_pass(struct ConvolutionLayer*);
 void free_filters(struct ConvolutionLayer*);
 void free_regions(struct ConvolutionLayer*);
 

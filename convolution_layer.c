@@ -34,6 +34,9 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
     int i, j, k, x, y, r, c;
     unsigned char pixel;
 
+    layer->image_height = image->height;
+    layer->image_width = image->width;
+
     int num_regions = (image->height - 2) * (image->width - 2); // Num of regions when using valid padding
 
     // Allocate memory for layer->image_region (3D array)
@@ -46,8 +49,8 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
     }
 
     // Allocate memory for layer->output_x_pixel && layer->output_y_pixel
-    layer->output_x_pixel = malloc(image->width * image->height * sizeof(unsigned short));
-    layer->output_y_pixel = malloc(image->width * image->height * sizeof(unsigned short));
+    layer->output_x_pixel = malloc(image->width * image->height * sizeof(int));
+    layer->output_y_pixel = malloc(image->width * image->height * sizeof(int));
 
     // Extract all 3x3 sections of image and store
     k = 0;
@@ -64,8 +67,8 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
                 }
                 r++;
             }
-            layer->output_x_pixel[k] = j;
-            layer->output_y_pixel[k] = i;
+            layer->output_x_pixel[k] = j - 1;
+            layer->output_y_pixel[k] = i - 1;
             k++;
         }
     }
@@ -74,17 +77,17 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
 
 // Performs forward pass of the conv layer. Returns 3D array of dimensions:
 // (image_height - 2, image_width - 2 , num filters)
-unsigned char*** forward_pass(struct ConvolutionLayer* layer) {
-    unsigned char ***output; // output volume to return 
+double*** forward_pass(struct ConvolutionLayer* layer) {
+    double ***output; // output volume to return 
     double ***result_3d; // stores result of multiply_3d_by_2d()
     double *result_1d; // stores result  of sum_3d_to_1d()D
     int i, j;
 
-    output = (unsigned char ***) malloc((layer->image_height - 2) * sizeof(unsigned char **));
+    output = (double ***) malloc((layer->image_height - 2) * sizeof(double **));
     for (i = 0; i < layer->image_height - 2; i++) {
-        output[i] = (unsigned char **) malloc((layer->image_width - 2) * sizeof(unsigned char *));
-        for (j = 0; j < layer->num_filters; j++) {
-            output[i][j] = (unsigned char *) malloc(layer->num_filters * sizeof(unsigned char));
+        output[i] = (double **) malloc((layer->image_width - 2) * sizeof(double *));
+        for (j = 0; j < layer->image_width - 2; j++) {
+            output[i][j] = (double*) malloc(layer->num_filters * sizeof(double));
         }
     }
 
@@ -98,9 +101,13 @@ unsigned char*** forward_pass(struct ConvolutionLayer* layer) {
 
     result_1d = (double *) malloc(layer->num_filters * sizeof(double));
 
-
-    // TODO: create ouput volume
-
+    for (i = 0; i < (layer->image_height - 2) * (layer->image_width - 2); i++) {
+        multiply_3d_by_2d(layer, (const unsigned char **) layer->image_regions[i], result_3d);
+        sum_3d_to_1d(layer, (const double ***) result_3d, result_1d);
+        for (j = 0; j < layer->num_filters; j++) {
+            output[layer->output_y_pixel[i]][layer->output_x_pixel[i]][j] = result_1d[j];
+        }
+    }
 
     // Free  memory of result_3d and result_1d
     for (i = 0; i < layer->filter_height; i++) {

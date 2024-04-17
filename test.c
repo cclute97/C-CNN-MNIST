@@ -276,7 +276,41 @@ void test_sum_3d_to_1d() {
     layer_01.free_filters_fp = free_filters;
     layer_01.free_regions_fp(&layer_01);
     layer_01.free_filters_fp(&layer_01);
+}
 
+void test_forward_pass() {
+    struct Image image_01;
+    image_01.width = 4;
+    image_01.height = 4;
+    unsigned char data[] = {0, 50, 0, 29, 
+                            0, 80, 31, 2, 
+                            33, 90, 0, 75, 
+                            0, 9, 0, 95};
+
+    image_01.pixel_data = data;
+
+    struct ConvolutionLayer layer_01;
+    layer_01.init_layer_fp = init_layer;
+    layer_01.iterate_regions_fp = iterate_regions;
+    layer_01.forward_pass_fp = forward_pass;
+    layer_01.init_layer_fp(&layer_01, 10, 3, 3);
+    layer_01.iterate_regions_fp(&layer_01, &image_01);
+
+    double ***output_volume;
+    output_volume = layer_01.forward_pass_fp(&layer_01);
+
+    int i, j, k;
+
+    printf("Output Volume: \n");
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            printf("Row: %d, Column: %d \n", i, j);
+            for (k = 0; k < layer_01.num_filters; k++) {
+                printf("%f\n", output_volume[i][j][k]);
+            }
+            printf("\n");
+        }
+    }
 }
 
 int main() {
@@ -287,6 +321,7 @@ int main() {
     //test_iterate_regions_large();
     //test_multiply_3d_by_2d();
     //test_sum_3d_to_1d();
+    test_forward_pass();
 
     return 0;
 }
