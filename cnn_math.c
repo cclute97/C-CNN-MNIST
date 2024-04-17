@@ -21,3 +21,14 @@ void fill_3D_array_random(struct ConvolutionLayer* layer) {
         }
     }
 }
+
+void multiply_3d_by_2d(const struct ConvolutionLayer* layer, const unsigned char** array_2d, double*** result) {
+    int i, j, k;
+    for (i = 0; i < layer->num_filters; i++) {
+        for (j = 0; j < layer->filter_height; j++) {
+            for (k = 0; k < layer->filter_width; k++) {
+                result[i][j][k] = layer->filters[i][j][k] * array_2d[j][k];
+            }
+        }
+    }
+}

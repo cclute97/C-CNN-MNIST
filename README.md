@@ -5,10 +5,10 @@ Basic implementation of a convolutional neural network (CNN) in C, used to class
 Linear Algebra/Data Science Concepts Utilized: 
 
 1. Vectors/Matrices
-2. Sobel Filter
-3. Convolution
+2. Sobel Filter (?) - Check on this
+3. Convolution/Cross-Correlation
 4. Element-wise multiplication
-5. Same-Padding / Value-Padding
+5. Value-Padding
 
 How Does It Work?
 
@@ -18,7 +18,7 @@ high number of pixels that need to be analyzed.  Convolution is used to transfor
    1. Overlaying the filter over the image at a given location.
    2. Performing element wise multiplication between the corresponding values in the image and the overlayed filter.  
    3. Summing the element-wise products, which becomes the output value for the destination pixel of the output image. 
-   4. Repeating this process for all location in the input image.  
+   4. Repeating this process for all locations in the input image.  
 
 
 Sources: 
@@ -32,5 +32,5 @@ TODO:
 
 -Find a dataset to use
 -Find a way to convert each image in dataset using convert_image and store in 3D array
--initialize function pointers in init
 -make everything const unless mutable
+-free memory for output in forward_pass() somewhere
