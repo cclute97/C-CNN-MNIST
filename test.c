@@ -311,6 +311,19 @@ void test_forward_pass() {
             printf("\n");
         }
     }
+
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            free(output_volume[i][j]);
+        }
+        free(output_volume[i]);
+    }
+    free(output_volume);
+
+    layer_01.free_regions_fp = free_regions;
+    layer_01.free_filters_fp = free_filters;
+    layer_01.free_regions_fp(&layer_01);
+    layer_01.free_filters_fp(&layer_01);
 }
 
 int main() {

@@ -110,8 +110,8 @@ double*** forward_pass(struct ConvolutionLayer* layer) {
     }
 
     // Free  memory of result_3d and result_1d
-    for (i = 0; i < layer->filter_height; i++) {
-        for (j = 0; j < layer->filter_width; j++) {
+    for (i = 0; i < layer->num_filters; i++) {
+        for (j = 0; j < layer->filter_height; j++) {
             free(result_3d[i][j]);
         }
         free(result_3d[i]);
@@ -127,8 +127,8 @@ double*** forward_pass(struct ConvolutionLayer* layer) {
 
 void free_filters(struct ConvolutionLayer* layer) {
     int i, j;
-    for (i = 0; i < layer->filter_height; i++) {
-        for (j = 0; j < layer->filter_width; j++) {
+    for (i = 0; i < layer->num_filters; i++) {
+        for (j = 0; j < layer->filter_height; j++) {
             free(layer->filters[i][j]);
         }
         free(layer->filters[i]);
@@ -140,7 +140,7 @@ void free_regions(struct ConvolutionLayer* layer) {
     unsigned short i;
     unsigned short j;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < layer->num_regions; i++) {
         for (j = 0; j < 3; j++) {
             free(layer->image_regions[i][j]);
         }
