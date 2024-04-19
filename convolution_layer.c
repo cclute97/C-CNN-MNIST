@@ -40,11 +40,11 @@ void iterate_regions(struct ConvolutionLayer* layer, struct Image* image) {
     int num_regions = (image->height - 2) * (image->width - 2); // Num of regions when using valid padding
 
     // Allocate memory for layer->image_region (3D array)
-    layer->image_regions = (unsigned char***)malloc(num_regions * sizeof(unsigned char**));
+    layer->image_regions = (unsigned char***) malloc(num_regions * sizeof(unsigned char**));
     for (i = 0; i < num_regions; i++) {
-        layer->image_regions[i] = (unsigned char**)malloc(layer->filter_height * sizeof(unsigned char*));
+        layer->image_regions[i] = (unsigned char**) malloc(layer->filter_height * sizeof(unsigned char*));
         for (j = 0; j < layer->filter_height; j++) {
-            layer->image_regions[i][j] = (unsigned char*)malloc(layer->filter_width * sizeof(unsigned char));
+            layer->image_regions[i][j] = (unsigned char*) malloc(layer->filter_width * sizeof(unsigned char));
         }
     }
 

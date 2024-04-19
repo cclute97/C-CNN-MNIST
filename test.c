@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "convolution_layer.h"
+#include "max_pool_layer.h"
 #include "image.h"
 #include "cnn_math.h"
 
@@ -326,6 +327,128 @@ void test_forward_pass() {
     layer_01.free_filters_fp(&layer_01);
 }
 
+void test_forward_pass_large() {
+    struct Image image_01;
+    image_01.width = 6;
+    image_01.height = 6;
+    unsigned char data[] = {0, 50, 0, 29, 11, 16, 
+                            0, 80, 31, 2, 14, 20,
+                            33, 90, 0, 75, 22, 45, 
+                            0, 9, 0, 95, 76, 23, 
+                            22, 45, 67, 2, 55, 3, 
+                            12, 45, 72, 34, 22, 11,
+                            11, 60, 2, 4, 66, 72};
+
+    image_01.pixel_data = data;
+
+    struct ConvolutionLayer layer_01;
+    layer_01.init_layer_fp = init_layer;
+    layer_01.iterate_regions_fp = iterate_regions;
+    layer_01.forward_pass_fp = forward_pass;
+    layer_01.init_layer_fp(&layer_01, 10, 3, 3);
+    layer_01.iterate_regions_fp(&layer_01, &image_01);
+
+    double ***output_volume;
+    output_volume = layer_01.forward_pass_fp(&layer_01);
+
+    int i, j, k;
+
+    printf("Output Volume: \n");
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            printf("Row: %d, Column: %d \n", i, j);
+            for (k = 0; k < layer_01.num_filters; k++) {
+                printf("%f\n", output_volume[i][j][k]);
+            }
+            printf("\n");
+        }
+    }
+
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            free(output_volume[i][j]);
+        }
+        free(output_volume[i]);
+    }
+    free(output_volume);
+
+    layer_01.free_regions_fp = free_regions;
+    layer_01.free_filters_fp = free_filters;
+    layer_01.free_regions_fp(&layer_01);
+    layer_01.free_filters_fp(&layer_01);
+}
+
+void test_max_pool_iterate_regions() {
+    struct Image image_01;
+    image_01.width = 6;
+    image_01.height = 6;
+    unsigned char data[] = {0, 50, 0, 29, 11, 16, 
+                            0, 80, 31, 2, 14, 20,
+                            33, 90, 0, 75, 22, 45, 
+                            0, 9, 0, 95, 76, 23, 
+                            22, 45, 67, 2, 55, 3, 
+                            12, 45, 72, 34, 22, 11,
+                            11, 60, 2, 4, 66, 72};
+
+    image_01.pixel_data = data;
+
+    struct ConvolutionLayer layer_01;
+    layer_01.init_layer_fp = init_layer;
+    layer_01.iterate_regions_fp = iterate_regions;
+    layer_01.forward_pass_fp = forward_pass;
+    layer_01.init_layer_fp(&layer_01, 10, 3, 3);
+    layer_01.iterate_regions_fp(&layer_01, &image_01);
+
+    double ***output_volume;
+    output_volume = layer_01.forward_pass_fp(&layer_01);
+
+    int i, j, k, l;
+
+    printf("Convolution Layer Output Volume: \n");
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            printf("Row: %d, Column: %d \n", i, j);
+            for (k = 0; k < layer_01.num_filters; k++) {
+                printf("%f\n", output_volume[i][j][k]);
+            }
+            printf("\n");
+        }
+    }
+
+    struct MaxPoolLayer layer_02;
+    layer_02.init_layer_fp = max_pool_init_layer;
+    layer_02.iterate_regions_fp = max_pool_iterate_regions;
+    layer_02.init_layer_fp(&layer_02, 2, 4, 4, 10);
+    layer_02.iterate_regions_fp(&layer_02, (const double ***) output_volume);
+
+    printf("Max Pooling Layer Regions:\n");
+    for (i = 0; i < layer_02.new_height * layer_02.new_width; i++) {
+        for (j = 0; j < layer_02.pool_size; j++) {
+            for (k = 0; k < layer_02.pool_size; k++) {
+                printf("Region %d, row %d, columns %d\n", i, j, k);
+                for (l = 0; l < layer_02.input_num_filters; l++) {
+                    printf("%f ", layer_02.input_volume_regions[i][j][k][l]);
+                }
+                printf("\n");
+            }
+        }
+    }
+
+    for (i = 0; i < layer_01.image_height - 2; i++) {
+        for (j = 0; j < layer_01.image_width - 2; j++) {
+            free(output_volume[i][j]);
+        }
+        free(output_volume[i]);
+    }
+    free(output_volume);
+
+    layer_01.free_regions_fp = free_regions;
+    layer_01.free_filters_fp = free_filters;
+    layer_01.free_regions_fp(&layer_01);
+    layer_01.free_filters_fp(&layer_01);
+
+}
+
 int main() {
 
     //test_layer_init();
@@ -334,7 +457,9 @@ int main() {
     //test_iterate_regions_large();
     //test_multiply_3d_by_2d();
     //test_sum_3d_to_1d();
-    test_forward_pass();
+    //test_forward_pass();
+    //test_forward_pass_large();
+    test_max_pool_iterate_regions();
 
     return 0;
 }

@@ -1,4 +1,3 @@
-
 #ifndef CONVOLUTION_LAYER_H
 #define CONVOLUTION_LAYER_H
 
