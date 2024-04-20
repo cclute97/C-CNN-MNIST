@@ -15,4 +15,6 @@ void multiply_3d_by_2d(const struct ConvolutionLayer*, const unsigned char**, do
 // Stores in a given 1d array
 void sum_3d_to_1d(const struct ConvolutionLayer*, const double***, double*);
 
+void find_region_max(const double ***, const unsigned short, const unsigned short, int *);
+
 #endif

@@ -25,14 +25,14 @@ struct MaxPoolLayer {
     void(*init_layer_fp)(struct MaxPoolLayer*, unsigned char, const unsigned short, const unsigned short,
                          const unsigned short);
     void(*iterate_regions_fp)(struct MaxPoolLayer*, const double ***);
-    void(*forward_pass_fp)(struct MaxPoolLayer*, const double ***);
+    double***(*forward_pass_fp)(struct MaxPoolLayer*);
     void(*free_regions_fp)(struct MaxPoolLayer*);
 };
 
 void max_pool_init_layer(struct MaxPoolLayer*, unsigned char, const unsigned short, const unsigned short,
                 const unsigned short);
 void max_pool_iterate_regions(struct MaxPoolLayer*, const double ***);
-void max_pool_forward_pass(struct MaxPoolLayer*, const double ***);
+double*** max_pool_forward_pass(struct MaxPoolLayer*);
 void max_pool_free_regions(struct MaxPoolLayer*);
 
 #endif 

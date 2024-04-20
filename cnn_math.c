@@ -46,3 +46,21 @@ void sum_3d_to_1d(const struct ConvolutionLayer *layer, const double*** array_3d
         sum = 0;
     }
 }
+
+void find_region_max(const double ***region, const unsigned short pool_size, const unsigned short num_filters,
+                     int *winning_index) {
+    double current_max = region[0][0][0];
+    int i, j, k;
+
+    for (i = 0; i < pool_size; i++) {
+        for (j = 0; j < pool_size; j++) {
+            for (k = 0; k < num_filters; k++) {
+                if (region[i][j][k] > current_max) {
+                    current_max = region[i][j][k];
+                    winning_index[0] = i;
+                    winning_index[1] = j;
+                }
+            }
+        }
+    }
+}   
